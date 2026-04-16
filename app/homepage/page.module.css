@@ -43,7 +43,11 @@
     grid-template-columns: auto auto auto auto;
     gap:30px;
     width: 95%;
-
+}
+.buttonsform{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 @media screen and (max-width: 800px) {
   .homeitems {
