@@ -37,8 +37,37 @@ export default function Homepage(){
     const [stock,setStock]=useState(0);
     const [searchtext,setSearchText]=useState("");
 
-    const search=(searchtxt:string)=>{
-        
+     useEffect(()=>{
+          const timer = setTimeout(() => {
+            search(searchtext);
+            }, 500);
+            return () => clearTimeout(timer);
+    },[searchtext]);
+    const search=async(searchtxt:string)=>{
+        if(searchtxt===''){
+            fetchdata();
+        }
+        else{
+            try{
+                const res=await fetch(`https://dummyjson.com/products/search?q=${searchtxt}`)
+                if(!res.ok){
+                    alert("Something went wrong!");
+                    return;
+                }
+                const data= await res.json();
+                const localprod=Object.keys(localStorage).map((keys)=>{
+                const pro = localStorage.getItem(keys);
+                    return pro ? JSON.parse(pro) : null;
+                })
+                .filter((pro) =>
+                        pro.title.toLowerCase().includes(searchtxt.toLowerCase())
+                    );
+                setData([...data.products,...localprod]);
+            }
+            catch(err){
+                alert(err);
+            }
+        }
     }
 
     const additem=async()=>{
@@ -131,7 +160,7 @@ export default function Homepage(){
                 <ShoppingCartIcon onClick={()=>setOpenDia(true)}/>
             </div>
             <div className={style.searchfield}>
-                <TextField placeholder='Search Products..' variant="outlined" className={style.searchbar} onChange={(e)=>{setSearchText(e.target.value),search(searchtext)}}
+                <TextField placeholder='Search Products..' variant="outlined" className={style.searchbar} onChange={(e)=>{setSearchText(e.target.value)}}
                 sx={
                     {
                         '& .MuiOutlinedInput-root': {
@@ -157,7 +186,7 @@ export default function Homepage(){
             {
                 data.map((item)=>{
                     return(
-                        <Thumbnail id={item.id} img={item.thumbnail} title={item.title} des={item.description} price={item.price}/>
+                        <Thumbnail key={item.id} id={item.id} img={item.thumbnail} title={item.title} des={item.description} price={item.price}/>
                     );
                 })
             }

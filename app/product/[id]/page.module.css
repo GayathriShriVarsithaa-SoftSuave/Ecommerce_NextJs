@@ -1,0 +1,113 @@
+.prodhead{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.prod{
+    padding: 10px;
+}
+.prodbody{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.prodhead1{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.prodbody .prodimage img{
+    height: 300px;
+    width: 300px;
+}
+.prodbody .prodimage .prodimages{
+    margin: auto 20px;
+    background-color: #E8E5E0;
+    border-radius: 30px;
+}
+.prodbody .prodimage .pricebody{
+    text-align: center;
+}
+.proddetails{
+    margin:10px;
+}
+.body2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 30px;
+    gap: 20px;
+}
+.destxt{
+    font-size: 18px;
+    font-weight: 600;
+}
+.txttitle{
+   font-weight: 600;
+}
+.prodes{
+    text-indent: 40px;
+    text-align: justify;
+    margin:10px;
+    line-height:1.55 ;
+}
+.btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.rate{
+    background-color: #E8E5E0;
+    padding: 20px;
+    border-radius: 30px;
+}
+.proddetails p{
+    font-size: 18px;
+}
+.body2 p{
+    font-size: 18px;
+}
+.heading{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.buttonsform{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+@media screen and (max-width:800px){
+    .prodbody{
+        flex-direction: column;
+        width: 100%;
+        align-items: normal;
+    }
+    .prodbody .prodimage{
+        width: 95%;
+    }
+    .prodbody .prodimage img{
+        width: 90%;
+        margin:auto 20px;
+    }
+}
+
+@media screen and (max-width:993px){
+    .body2{
+        flex-direction: column;
+        gap: 30px;
+    }
+}

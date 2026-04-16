@@ -42,14 +42,14 @@
     display: grid;
     grid-template-columns: auto auto auto auto;
     gap:30px;
-    width: 95%;
+    width: 100%;
 }
 .buttonsform{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 850px) {
   .homeitems {
     grid-template-columns: auto auto;
   }
