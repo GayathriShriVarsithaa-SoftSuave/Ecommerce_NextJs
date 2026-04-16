@@ -1,0 +1,40 @@
+.thumbbody{
+    height: auto;
+    width: 90%;
+    border-radius: 30px;
+    background-color: #E8E5E0;
+    margin: 20px;
+}
+.thumbnailbody{
+    height: auto;
+    width: 100%;
+    border-radius: 30px;
+    background-color:  #E8E5E0;
+}
+.thumbnailbody.hover{
+    cursor: pointer;
+}
+.thumbimg{
+    height: 250px;
+    width:95%;
+    border-radius: 30px;
+}
+.thumbimg:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+.titleprice{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+.titleprice .thumbprice{
+    color: #F97316;
+}
+.titleprice .thumbtitle{
+    font-weight: 600;
+}
+.des{
+    padding: 10px;
+}
