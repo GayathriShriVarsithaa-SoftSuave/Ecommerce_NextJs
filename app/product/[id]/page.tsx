@@ -6,6 +6,7 @@ import {useParams,useRouter} from 'next/navigation'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField } from '@mui/material';
+import { useDispatch, UseDispatch, useSelector } from 'react-redux';
 import {Dialog} from '@mui/material';
 import {DialogActions} from '@mui/material';
 import {DialogContent} from '@mui/material';
@@ -13,6 +14,10 @@ import {DialogContentText} from '@mui/material';
 import {DialogTitle} from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
 import Link from 'next/link';
+import { addcartItem } from '@/redux/features/cartSlice';
+import { Drawer } from '@mui/joy';
+import type { RootState } from '../../../redux/store';
+import Item from '../../../components/item/Item'
 interface Dimension{
     width:number,
     height:number,
@@ -68,6 +73,15 @@ export default function Product(){
     const params=useParams();
     const id=params.id;
     const router=useRouter();
+    const dispatch=useDispatch();
+    const [opencart,setOpenCart]=useState(false);
+    const { cartitems } = useSelector((state: RootState) => state.cartitem);
+    const addtask=()=>{
+        const id=params.id;
+        const finalid=Array.isArray(id)? id[0] : ''
+        dispatch(addcartItem({id:finalid,item:{title,price,img:data?.images[0] || ''}}))
+        setOpenCart(true);
+    }
     const updateitem=async()=>{
         try{
             const res=await fetch(`https://dummyjson.com/products/${id}`,{
@@ -144,7 +158,7 @@ export default function Product(){
             <div className={style.prodhead}>
                 <Link href={"/"}> <ArrowBackIcon className={style.backicon}/></Link>
                 
-                <Button className={style.addcart} sx={{backgroundColor:'#02e7d0',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}}>Add to Cart</Button>
+                <Button onClick={()=>addtask()} className={style.addcart} sx={{backgroundColor:'#02e7d0',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}}>Add to Cart</Button>
             </div>
             <p className={style.heading}>{title}</p>
             <p className={style.destxt}>Description:</p>
@@ -304,6 +318,26 @@ export default function Product(){
                     </DialogActions>
                 </div>
             </Dialog>
+
+
+
+            <Drawer anchor="right" open={opencart} onClose={()=>setOpenCart(false)} >
+                <div style={{ width: '300px', padding: '20px' }}>
+                            <h2>Cart</h2>
+                            {
+                                Object.keys(cartitems).length===0?<p>No items in Cart</p>:
+                                Object.keys(cartitems).map((key)=>(
+                                    <div>
+                                        <Item title={cartitems[key].title} price={cartitems[key].price} img={cartitems[key].img} id={key}/>
+                                    </div>
+                                ))
+                            }
+                            {
+                            Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
+                        }
+                    </div>
+
+            </Drawer>
             
     </div>);
 }

@@ -16,6 +16,9 @@ import RadioGroup from '@mui/joy/RadioGroup';
 import { Button, Drawer, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Thumbnail from '../../components/thumbnail/Thumbnail';
+import {RootState} from '../../redux/store'
+import { useSelector } from 'react-redux';
+import Item from '../../components/item/Item'
 type Product={
     id:string,
     title:string,
@@ -36,7 +39,7 @@ export default function Homepage(){
     const [brand,setBrand]=useState("");
     const [stock,setStock]=useState(0);
     const [searchtext,setSearchText]=useState("");
-
+    const { cartitems } = useSelector((state: RootState) => state.cartitem);
      useEffect(()=>{
           const timer = setTimeout(() => {
             search(searchtext);
@@ -233,18 +236,24 @@ export default function Homepage(){
         </Dialog>
 
 
-        <Drawer open={opendia} onClose={()=>setOpenDia(false)} anchor='right'>
-            <div style={{ width: '300px', padding: '20px' }}>
-                    <h2>Cart</h2>
-                    {
-                        <p>no items in cart</p>
-                    }
-                    {
-                        <Button>Proceed to Buy</Button>
-                    }
-                </div>
+        <Drawer anchor="right" open={opendia} onClose={()=>setOpenDia(false)}  >
+                <div style={{ width: '300px', padding: '20px' }}>
+                            <h2>Cart</h2>
+                            {
+                                Object.keys(cartitems).length===0?<p>No items in Cart</p>:
+                                Object.keys(cartitems).map((key)=>(
+                                    <div>
+                                        <Item title={cartitems[key].title} price={cartitems[key].price} img={cartitems[key].img} id={key}/>
+                                    </div>
+                                ))
+                                
+                            }
+                            {
+                        Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
+                        }
+                    </div>
 
-        </Drawer>
+            </Drawer>
         
     </div>);
 }

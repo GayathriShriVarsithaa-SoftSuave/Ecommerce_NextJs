@@ -1,7 +1,9 @@
 "use client"
 import style from './Thumbnail.module.css'
 import Link from 'next/link';
-import { Button, Drawer, TextField} from '@mui/material';
+import { Button} from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { addcartItem } from '@/redux/features/cartSlice';
 interface ThumbnailProps{
     id:string;
     img:string;
@@ -10,6 +12,11 @@ interface ThumbnailProps{
     price:number
 };
 export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
+    const dispatch=useDispatch();
+    const addtask=()=>{
+        dispatch(addcartItem({id,item:{title,price,img}}))
+        alert("Product added!!")
+    }
     const description=des.length>90?des.slice(0,90)+"..." : des;
     return(
        
@@ -25,7 +32,8 @@ export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
             </div>
         </Link>
         <div>
-            <Button sx={
+            <Button onClick={()=>addtask()}
+            sx={
                 {
                     borderRadius: "30px",
                     backgroundColor: "#02e7d0",
