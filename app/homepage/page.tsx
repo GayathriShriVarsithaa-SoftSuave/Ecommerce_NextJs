@@ -271,7 +271,7 @@ export default function Homepage(){
                     </div>
 
             </Drawer>
-
+            <div className={style.gapdiv}></div>
             <div className={style.page}>
                 <TablePagination
                     sx={{
