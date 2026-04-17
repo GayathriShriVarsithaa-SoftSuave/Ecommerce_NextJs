@@ -1,10 +1,10 @@
 "use client"
-import style from './page.module.css'
+import style from './Homepage.module.css'
 import { useState,useEffect} from 'react';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Dialog, Pagination} from '@mui/material';
+import {Dialog} from '@mui/material';
 import {DialogActions} from '@mui/material';
 import {DialogContent} from '@mui/material';
 import {DialogContentText} from '@mui/material';
@@ -15,10 +15,10 @@ import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import { Button, Drawer, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Thumbnail from '../../components/thumbnail/Thumbnail';
+import Thumbnail from '../thumbnail/Thumbnail';
 import {RootState} from '../../redux/store'
 import { useSelector } from 'react-redux';
-import Item from '../../components/item/Item'
+import Item from '../item/Item'
 type Product={
     id:string,
     title:string,
@@ -272,7 +272,7 @@ export default function Homepage(){
 
             </Drawer>
        
-            <TablePagination
+            <TablePagination component="div"
                 sx={{
                     width:'100%',
                     display: 'flex',
