@@ -205,7 +205,7 @@ export default function Homepage(){
             {
                 data.length!==0?
                     (data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item)=>
-                        <Thumbnail id={item?.id} img={item?.thumbnail} title={item?.title} price={item?.price} des={item?.description}/>
+                        <Thumbnail key={item?.id} id={item?.id} img={item?.thumbnail} title={item?.title} price={item?.price} des={item?.description}/>
                     ))
                     :
                     (<p style={{textAlign:'center', fontSize:'20px'}}>No Products Found</p>)
@@ -271,21 +271,23 @@ export default function Homepage(){
                     </div>
 
             </Drawer>
-            <div className={style.gapdiv}></div>
-            <div className={style.page}>
-                <TablePagination
-                    sx={{
-                        width:'100%',
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}
-                    count={data.length}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />  
-            </div>
+       
+            <TablePagination
+                sx={{
+                    width:'100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    position:'fixed',
+                    bottom:'0',
+                    backgroundColor:'whitesmoke'
+                }}
+                count={data.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />  
+            
         
     </div>);
 }

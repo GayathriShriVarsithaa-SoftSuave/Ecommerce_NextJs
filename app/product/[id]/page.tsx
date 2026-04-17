@@ -193,7 +193,7 @@ export default function Product(){
                 <div className={style.body2}>
                         {
                             data?.reviews?.map((review)=> 
-                            <div className={style.rate}>
+                            <div className={style.rate} key={review.reviewerEmail}>
                                 <p className={style.txttitle}>Rating : {review.rating}</p>
                                 <p>Comment : {review.comment}</p>
                                 <p>Date : {review.date}</p>
@@ -333,7 +333,7 @@ export default function Product(){
                                 ))
                             }
                             {
-                            Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
+                        Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
                         }
                     </div>
 
