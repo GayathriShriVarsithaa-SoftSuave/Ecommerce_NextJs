@@ -4,7 +4,7 @@ import { useState,useEffect} from 'react';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Dialog} from '@mui/material';
+import {Dialog, Pagination} from '@mui/material';
 import {DialogActions} from '@mui/material';
 import {DialogContent} from '@mui/material';
 import {DialogContentText} from '@mui/material';
@@ -40,6 +40,22 @@ export default function Homepage(){
     const [stock,setStock]=useState(0);
     const [searchtext,setSearchText]=useState("");
     const { cartitems } = useSelector((state: RootState) => state.cartitem);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (
+        event: React.MouseEvent<HTMLButtonElement> | null,
+        newPage: number,
+    ) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
      useEffect(()=>{
           const timer = setTimeout(() => {
             search(searchtext);
@@ -187,11 +203,12 @@ export default function Homepage(){
 
         <div className={style.homeitems}>
             {
-                data.map((item)=>{
-                    return(
-                        <Thumbnail key={item.id} id={item.id} img={item.thumbnail} title={item.title} des={item.description} price={item.price}/>
-                    );
-                })
+                data.length!==0?
+                    (data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item)=>
+                        <Thumbnail id={item?.id} img={item?.thumbnail} title={item?.title} price={item?.price} des={item?.description}/>
+                    ))
+                    :
+                    (<p style={{textAlign:'center', fontSize:'20px'}}>No Products Found</p>)
             }
         </div>
         <Dialog open={openform} onClose={()=>setOpenForm(false)} >
@@ -254,6 +271,21 @@ export default function Homepage(){
                     </div>
 
             </Drawer>
+
+            <div className={style.page}>
+                <TablePagination
+                    sx={{
+                        width:'100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                    count={data.length}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />  
+            </div>
         
     </div>);
 }
