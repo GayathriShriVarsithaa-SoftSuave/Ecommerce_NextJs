@@ -96,7 +96,7 @@ export default function Homepage(){
             return;
         }
         try{
-            const res=await fetch('https://dummyjson.com/products/add',{
+            const res=await fetch('/api/products',{
                 method:'POST',
                 headers: {'Content-Type':'application/json'},
                 body:JSON.stringify({

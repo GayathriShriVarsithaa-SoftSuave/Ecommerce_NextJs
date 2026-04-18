@@ -80,7 +80,7 @@ export default function Productdetails({id}:{id:string}){
     }
     const updateitem=async()=>{
         try{
-            const res=await fetch(`https://dummyjson.com/products/${id}`,{
+            const res=await fetch(`/api/products/${id}`,{
                 method:'PATCH',
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify({
@@ -108,7 +108,7 @@ export default function Productdetails({id}:{id:string}){
     }
     const delprod=async()=>{
         try{
-            const res=await fetch((`https://dummyjson.com/products/${id}`),{
+            const res=await fetch((`/api/products/${id}`),{
             method:'DELETE'
             })
             if(!res.ok){
