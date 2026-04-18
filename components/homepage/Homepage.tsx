@@ -19,6 +19,7 @@ import Thumbnail from '../thumbnail/Thumbnail';
 import {RootState} from '../../redux/store'
 import { useSelector } from 'react-redux';
 import Item from '../item/Item'
+import { generateId } from '@/helpers/generateId';
 type Product={
     id:string,
     title:string,
@@ -65,7 +66,7 @@ export default function Homepage(){
     const search=async(searchtxt:string)=>{
         if(searchtxt===''){
             fetchdata();
-        }
+        }                                                                                                                                                                                                                                                                
         else{
             try{
                 const res=await fetch(`https://dummyjson.com/products/search?q=${searchtxt}`)
@@ -114,7 +115,7 @@ export default function Homepage(){
                 return;
             }
             const data=await res.json();
-            localStorage.setItem(genid(),JSON.stringify(data));
+            localStorage.setItem(generateId(),JSON.stringify(data));
             await fetchdata();
             alert("Product added");
             setOpenForm(false);
@@ -122,16 +123,6 @@ export default function Homepage(){
         catch(err){
             alert(err);
         }
-    }
-    const genid=():string=>{
-        const id = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-        /[xy]/g,
-        function (c) {
-          const r = (Math.random() * 16) | 0;
-          const v = c === "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        })
-        return (id);
     }
     const fetchdata=async()=>{
         try{
@@ -287,7 +278,5 @@ export default function Homepage(){
                 rowsPerPage={rowsPerPage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />  
-            
-        
     </div>);
 }

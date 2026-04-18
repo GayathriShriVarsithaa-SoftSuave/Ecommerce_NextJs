@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button} from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addcartItem } from '@/redux/features/cartSlice';
+import {generateDes} from '@/helpers/generateDes'
 interface ThumbnailProps{
     id:string;
     img:string;
@@ -17,7 +18,7 @@ export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
         dispatch(addcartItem({id,item:{title,price,img}}))
         alert("Product added!!")
     }
-    const description=des.length>90?des.slice(0,90)+"..." : des;
+    const description=generateDes(des);
     return(
        
     <div className={style.thumbbody}>
