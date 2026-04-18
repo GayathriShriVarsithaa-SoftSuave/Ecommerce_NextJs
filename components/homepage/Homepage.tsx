@@ -126,18 +126,18 @@ export default function Homepage(){
     }
     const fetchdata=async()=>{
         try{
-            const res=await fetch('https://dummyjson.com/products')
-            if(!res.ok){
+            const res = await fetch('/api/products');
+            if (!res.ok) {
                 alert("something went wrong!");
                 return;
             }
-            const data=await(res.json());
-            const localdata=Object.keys(localStorage).map((keys)=>{
-                return JSON.parse((localStorage.getItem(keys)) || '{}')
-            })
-            
-            setData([...data.products,...localdata]);
-        }
+            const data = await res.json();
+                const localdata=Object.keys(localStorage).map((keys)=>{
+                    return JSON.parse((localStorage.getItem(keys)) || '{}')
+                }) 
+                
+                setData([...data,...localdata]);
+            }
         catch(err){
             alert(err);
         }

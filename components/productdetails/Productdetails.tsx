@@ -99,7 +99,7 @@ export default function Productdetails({id}:{id:string}){
                 alert("Something went wrong!");
                 return;
             }
-            setDiaOpen(false);
+            setDiaOpen(false); 
             alert("Updated");
         }
         catch(err){
@@ -118,7 +118,7 @@ export default function Productdetails({id}:{id:string}){
             alert("Product Deleted!");
             router.push("/");
         }
-        catch(err){
+        catch(err){      
             alert(err);
         }
     }
