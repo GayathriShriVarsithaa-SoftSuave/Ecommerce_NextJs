@@ -3,7 +3,10 @@
     top:0;
     z-index: 1;
     background-color: whitesmoke;
-    padding-bottom: 35px;
+    padding-bottom: 45px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .headerprod{
     display: flex;
@@ -12,7 +15,6 @@
     justify-content: space-between;
     font-size: 30px;
     font-weight: 600;
-    margin:10px;
 }
 .headprodp{
     font-size: 30px;
@@ -44,6 +46,7 @@
     gap:30px;
     width: 100%;
     padding-bottom: 60px;
+    overflow:auto
 }
 .buttonsform{
     display: flex;
