@@ -18,6 +18,7 @@ import { addcartItem } from '@/redux/features/cartSlice';
 import { Drawer } from '@mui/joy';
 import type { RootState } from '../../redux/store';
 import Item from '../item/Item'
+import { useParams } from 'next/navigation';
 interface Dimension{
     width:number,
     height:number,
@@ -58,7 +59,9 @@ interface ProductData{
     images:string[]
 }
 
-export default function Productdetails({id}:{id:string}){
+export default function Productdetails(){
+    const params = useParams();
+    const id = Array.isArray(params.id) ? params.id[0] : params.id;
     const [diaopen,setDiaOpen]=useState(false);
     const [data,setData]=useState<ProductData>();
     const [title,setTitle]=useState("");
@@ -75,7 +78,7 @@ export default function Productdetails({id}:{id:string}){
     const [opencart,setOpenCart]=useState(false);
     const { cartitems } = useSelector((state: RootState) => state.cartitem);
     const addtask=()=>{
-        dispatch(addcartItem({id,item:{title,price,img:data?.images[0] || ''}}))
+        dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
         setOpenCart(true);
     }
     const updateitem=async()=>{
@@ -122,10 +125,11 @@ export default function Productdetails({id}:{id:string}){
             alert(err);
         }
     }
-
+    
     const fetchdata=async()=>{
         try{
-            const res=await fetch(`https://dummyjson.com/products/${id}`)
+            console.log("ID:", params.id);
+            const res=await fetch(`/api/products/${id}`)
             if(!res.ok){
                 alert("something went wrong!");
                 return;

@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
-export async function GET(){
+export async function GET(req:Request){
+    const {searchParams}=new URL(req.url);
+    const searchtxt=searchParams.get("q");
       try{
+        if(searchtxt){
+            const res=await fetch(`https://dummyjson.com/products/search?q=${searchtxt}`);
+            const data=await res.json();
+            return NextResponse.json(data.products);
+        }
             const res = await fetch('https://dummyjson.com/products');
             const data = await res.json();
             return NextResponse.json(data.products);

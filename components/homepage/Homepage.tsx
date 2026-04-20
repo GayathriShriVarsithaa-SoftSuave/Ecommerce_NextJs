@@ -69,7 +69,7 @@ export default function Homepage(){
         }                                                                                                                                                                                                                                                                
         else{
             try{
-                const res=await fetch(`https://dummyjson.com/products/search?q=${searchtxt}`)
+                const res=await fetch(`/api/products?q=${searchtxt}`)
                 if(!res.ok){
                     alert("Something went wrong!");
                     return;
@@ -82,7 +82,7 @@ export default function Homepage(){
                 .filter((pro) =>
                         pro.title.toLowerCase().includes(searchtxt.toLowerCase())
                     );
-                setData([...data.products,...localprod]);
+                setData([...data,...localprod]);
             }
             catch(err){
                 alert(err);
