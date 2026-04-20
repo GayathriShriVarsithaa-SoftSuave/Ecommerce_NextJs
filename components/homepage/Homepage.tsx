@@ -20,6 +20,9 @@ import {RootState} from '../../redux/store'
 import { useSelector } from 'react-redux';
 import Item from '../item/Item'
 import { generateId } from '@/helpers/generateId';
+import { getproducts } from '@/api/products/productapi';
+import { searchproducts } from '@/api/products/productapi';
+import { addproduct } from '@/api/products/productapi';
 type Product={
     id:string,
     title:string,
@@ -69,7 +72,7 @@ export default function Homepage(){
         }                                                                                                                                                                                                                                                                
         else{
             try{
-                const res=await fetch(`/api/products?q=${searchtxt}`)
+                const res=await searchproducts(searchtxt)
                 if(!res.ok){
                     alert("Something went wrong!");
                     return;
@@ -82,7 +85,7 @@ export default function Homepage(){
                 .filter((pro) =>
                         pro.title.toLowerCase().includes(searchtxt.toLowerCase())
                     );
-                setData([...data,...localprod]);
+                setData([...data.products,...localprod]);
             }
             catch(err){
                 alert(err);
@@ -96,20 +99,7 @@ export default function Homepage(){
             return;
         }
         try{
-            const res=await fetch('/api/products',{
-                method:'POST',
-                headers: {'Content-Type':'application/json'},
-                body:JSON.stringify({
-                    title:title,
-                    category:category,
-                    description:des,
-                    price:price,
-                    rating:rating,
-                    thumbnail:img,
-                    brand:brand,
-                    stock:stock
-                })
-            })
+            const res=await addproduct(title,category,des,price,rating,img,brand,stock);
             if(!res.ok){
                 alert("something went wrong!!");
                 return;
@@ -126,7 +116,7 @@ export default function Homepage(){
     }
     const fetchdata=async()=>{
         try{
-            const res = await fetch('/api/products');
+            const res = await getproducts();
             if (!res.ok) {
                 alert("something went wrong!");
                 return;
@@ -136,7 +126,7 @@ export default function Homepage(){
                     return JSON.parse((localStorage.getItem(keys)) || '{}')
                 }) 
                 
-                setData([...data,...localdata]);
+                setData([...data.products,...localdata]);
             }
         catch(err){
             alert(err);

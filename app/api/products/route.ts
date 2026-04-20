@@ -16,6 +16,7 @@ export async function GET(req:Request){
             return NextResponse.json({ message:"Error"});
         }
 }
+
 export async function POST(req:Request){
     try{
        const body=await req.json();

@@ -19,6 +19,9 @@ import { Drawer } from '@mui/joy';
 import type { RootState } from '../../redux/store';
 import Item from '../item/Item'
 import { useParams } from 'next/navigation';
+import { getsingleproduct } from '@/api/products/productapi';
+import { delproduct } from '@/api/products/productapi';
+import { updateproduct } from '@/api/products/productapi';
 interface Dimension{
     width:number,
     height:number,
@@ -93,21 +96,7 @@ export default function Productdetails(){
     }
     const updateitem=async()=>{
         try{
-            const res=await fetch(`/api/products/${id}`,{
-                method:'PATCH',
-                headers:{'Content-type':'application/json'},
-                body:JSON.stringify({
-                    title:title1,
-                    category:category1,
-                    price:price1,
-                    discountPercentage:actualprice1,
-                    rating:rating1,
-                    description:des1,
-                    brand:brand1,
-                    weight:weight1,
-                    minimumOrderQuantity:minorder1
-                })
-            })
+            const res=await updateproduct(id || "",title1,category1,price1,actualprice1,rating1,des1,brand1,weight1,minorder1);
             if(!res.ok){
                 alert("Something went wrong!");
                 return;
@@ -130,9 +119,7 @@ export default function Productdetails(){
     }
     const delprod=async()=>{
         try{
-            const res=await fetch((`/api/products/${id}`),{
-            method:'DELETE'
-            })
+            const res=await delproduct(id || "");
             if(!res.ok){
                 alert("something went wrong!");
                 return;
@@ -147,8 +134,7 @@ export default function Productdetails(){
     
     const fetchdata=async()=>{
         try{
-            console.log("ID:", params.id);
-            const res=await fetch(`/api/products/${id}`)
+            const res=await getsingleproduct(id || "");
             if(!res.ok){
                 alert("something went wrong!");
                 return;
