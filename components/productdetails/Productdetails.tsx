@@ -77,6 +77,16 @@ export default function Productdetails(){
     const dispatch=useDispatch();
     const [opencart,setOpenCart]=useState(false);
     const { cartitems } = useSelector((state: RootState) => state.cartitem);
+
+    const [title1,setTitle1]=useState(title);
+    const [des1,setDes1]=useState(des);
+    const [rating1,setRating1]=useState(rating);
+    const [category1,setCategory1]=useState(category);
+    const [price1,setPrice1]=useState(price);
+    const [actualprice1,setActualPrice1]=useState(actualprice);
+    const [brand1,setBrand1]=useState(brand);
+    const [weight1,setWeight1]=useState(weight);
+    const [minorder1,setMinOrder1]=useState(minorder);
     const addtask=()=>{
         dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
         setOpenCart(true);
@@ -87,21 +97,30 @@ export default function Productdetails(){
                 method:'PATCH',
                 headers:{'Content-type':'application/json'},
                 body:JSON.stringify({
-                    title:title,
-                    category:category,
-                    price:price,
-                    discountPercentage:actualprice,
-                    rating:rating,
-                    description:des,
-                    brand:brand,
-                    weight:weight,
-                    minimumOrderQuantity:minorder
+                    title:title1,
+                    category:category1,
+                    price:price1,
+                    discountPercentage:actualprice1,
+                    rating:rating1,
+                    description:des1,
+                    brand:brand1,
+                    weight:weight1,
+                    minimumOrderQuantity:minorder1
                 })
             })
             if(!res.ok){
                 alert("Something went wrong!");
                 return;
             }
+            setTitle(title1);
+            setDes(des1);
+            setCategory(category1);
+            setBrand(brand1);
+            setWeight(weight1);
+            setMinOrder(minorder1);
+            setActualPrice(actualprice1);
+            setPrice(price1);
+            setRating(rating1);
             setDiaOpen(false); 
             alert("Updated");
         }
@@ -211,8 +230,8 @@ export default function Productdetails(){
                 <Button variant="contained"  className='deletebtn' onClick={delprod}
                 sx={{backgroundColor:'red', '&:hover':{backgroundColor:'#ff5252',}, '&:active':{backgroundColor:'#ff1744'} }}>Delete</Button>
                 <Button variant="contained"
-                sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}} className='updatebtn' onClick={()=>{setDiaOpen(true);setTitle(title);setPrice(price);setCategory(category);setDes(des);
-                    setActualPrice(actualprice);setBrand(brand);setRating(rating);setWeight(weight);setMinOrder(minorder);
+                sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}} className='updatebtn' onClick={()=>{setDiaOpen(true);setTitle1(title);setPrice1(price);setCategory1(category);setDes1(des);
+                    setActualPrice1(actualprice);setBrand1(brand);setRating1(rating);setWeight1(weight);setMinOrder1(minorder);
                 }}>Update</Button>
             </div>
 
@@ -231,41 +250,41 @@ export default function Productdetails(){
                         <TextField 
                             sx={{ width: '100%' }}
                         variant="standard"
-                        value={title}
+                        value={title1}
                         required
                         label='Title'
                         margin="dense"
-                        onChange={(e)=>setTitle(e.target.value)}
+                        onChange={(e)=>setTitle1(e.target.value)}
                         /><br></br>
                         <TextField 
                             sx={{ width: '100%' }}
                             margin="dense"
                             required
                          variant="standard"
-                        value={category}
+                        value={category1}
                         label='Category'
-                        onChange={(e)=>setCategory(e.target.value)}/><br />
+                        onChange={(e)=>setCategory1(e.target.value)}/><br />
                         <TextField 
                             sx={{ width: '100%' }}
                             margin="dense"
                         variant="standard"
                         required
-                        value={price}
+                        value={price1}
                         label='Price'
-                        onChange={(e)=>setPrice(Number(e.target.value))}/><br/>
+                        onChange={(e)=>setPrice1(Number(e.target.value))}/><br/>
                         <TextField
                         sx={{width:'100%'}}
                         margin="dense"
                         required
                         variant="standard"
-                        value={actualprice}
+                        value={actualprice1}
                         label='Actual Price'
-                        onChange={(e)=>setActualPrice(Number(e.target.value))}
+                        onChange={(e)=>setActualPrice1(Number(e.target.value))}
                         />
                         <p>Description</p>
                         <Textarea 
-                        value={des}maxRows={5}
-                        onChange={(e)=>setDes(e.target.value)}
+                        value={des1}maxRows={5}
+                        onChange={(e)=>setDes1(e.target.value)}
                         sx={{width:'100%'}}
                         required
                         />
@@ -274,39 +293,39 @@ export default function Productdetails(){
                         required
                         margin="dense"
                         variant="standard"
-                        value={rating}
+                        value={rating1}
                         label='Rating'
                         type='Number'
-                        onChange={(e)=>setRating(Number(e.target.value))}
+                        onChange={(e)=>setRating1(Number(e.target.value))}
                         />
                         <TextField
                         sx={{width:'100%'}}
                         margin="dense"
                         variant="standard"
                         required
-                        value={brand}
+                        value={brand1}
                         label="Brand"
-                        onChange={(e)=>setBrand(e.target.value)}
+                        onChange={(e)=>setBrand1(e.target.value)}
                         />
                         <TextField
                         sx={{width:'100%'}}
                         margin="dense"
                         required
                         variant="standard"
-                        value={weight}
+                        value={weight1}
                         label="Weight"
                         type='Number'
-                        onChange={(e)=>setWeight(Number(e.target.value))}
+                        onChange={(e)=>setWeight1(Number(e.target.value))}
                         />
                          <TextField
                         sx={{width:'100%'}}
                         margin="dense"
-                        value={minorder}
+                        value={minorder1}
                         label="Minimum Order"
                         variant="standard"
                         type='Number'
                         required
-                        onChange={(e)=>setMinOrder(Number(e.target.value))}
+                        onChange={(e)=>setMinOrder1(Number(e.target.value))}
                         />
                     </form>
                 </DialogContent>
