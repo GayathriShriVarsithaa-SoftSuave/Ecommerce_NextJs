@@ -1,6 +1,6 @@
 "use client"
 import style from './Homepage.module.css'
-import { useState,useEffect} from 'react';
+import { useState,useEffect,useRef} from 'react';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -135,7 +135,26 @@ export default function Homepage(){
     useEffect(()=>{
         fetchdata()
     },[]);
-    return(<div>
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const lastScrollY = useRef(0);
+    const [showsearch, setShowsearch] = useState(true);
+        useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const handleScroll = () => {
+        const currentScroll = container.scrollTop;
+        if (currentScroll > lastScrollY.current) {
+        setShowsearch(false); 
+        } else {
+        setShowsearch(true);
+        }
+        lastScrollY.current = currentScroll;
+    };
+    container.addEventListener("scroll", handleScroll);
+    }, []);
+   
+
+    return(<div ref={scrollRef} className="flex-1 overflow-y-auto h-screen">
         <div className={style.homehead}>
             <div className={style.headerprod}>
                 <Button className={style.addbtn} onClick={()=>setOpenForm(true)}
@@ -159,39 +178,48 @@ export default function Homepage(){
                 <p className={style.headprodp}>PRODUCTS</p>
                 <ShoppingCartIcon onClick={()=>setOpenDia(true)}/>
             </div>
-            <div className={style.searchfield}>
-                <TextField placeholder='Search Products..' variant="outlined" className={style.searchbar} onChange={(e)=>{setSearchText(e.target.value)}}
-                sx={
-                    {
-                        '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                            border: 'none',
-                        },
-                        '&:hover fieldset': {
-                            border: 'none',
-                        },
-                        '&.Mui-focused fieldset': {
-                            border: 'none',
-                        },
+        </div>
+
+        <div className={style.searchfield} style={{
+            position: "fixed", 
+            left:"10%",
+            alignItems: "center",
+            top: showsearch ? "60px" : "-80px", 
+            transition: "top 0.5s ease",
+            zIndex: 1
+        }}>
+            <TextField placeholder='Search Products..' variant="outlined" className={style.searchbar} onChange={(e)=>{setSearchText(e.target.value)}}
+            sx={
+                {
+                    '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                        border: 'none',
                     },
-                    }   
-                }/>
-                <SearchIcon />
-            </div>
-
+                    '&:hover fieldset': {
+                        border: 'none',
+                    },
+                    '&.Mui-focused fieldset': {
+                        border: 'none',
+                    },
+                },
+                }   
+            }/>
+            <SearchIcon />
         </div>
+
+       
         
-
-        <div className={style.homeitems}>
-            {
-                data.length!==0?
-                    (data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item)=>
-                        <Thumbnail key={item?.id} id={item?.id} img={item?.thumbnail} title={item?.title} price={item?.price} des={item?.description}/>
-                    ))
-                    :
-                    (<p style={{textAlign:'center', fontSize:'20px'}}>No Products Found</p>)
-            }
-        </div>
+            <div className={style.homeitems} >
+                {
+                    data.length!==0?
+                        (data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item)=>
+                            <Thumbnail key={item?.id} id={item?.id} img={item?.thumbnail} title={item?.title} price={item?.price} des={item?.description}/>
+                        ))
+                        :
+                        (<p style={{textAlign:'center', fontSize:'20px'}}>No Products Found</p>)
+                }
+            </div>
+        
         <Dialog open={openform} onClose={()=>setOpenForm(false)} >
             <DialogTitle>Add a Product</DialogTitle>
             <IconButton onClick={()=>setOpenForm(false)} sx={{

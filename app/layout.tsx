@@ -25,12 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <ReduxProvider>{children}</ReduxProvider>
-        </body>
+  lang="en"
+  className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+>
+      <body className="overflow-hidden flex flex-col h-screen">
+  <ReduxProvider>{children}</ReduxProvider>
+</body>
     </html>
   );
 }

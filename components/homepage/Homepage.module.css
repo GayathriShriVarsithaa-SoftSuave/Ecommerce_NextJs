@@ -3,7 +3,7 @@
     top:0;
     z-index: 1;
     background-color: whitesmoke;
-    padding-bottom: 10px;
+    padding-bottom: 35px;
 }
 .headerprod{
     display: flex;
@@ -36,7 +36,7 @@
     width: 80%;
     padding: 10px;
     height: 50px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 .homeitems{
     display: grid;
@@ -50,9 +50,10 @@
     flex-direction: row;
     justify-content: space-between;
 }
-
 @media screen and (max-width: 850px) {
   .homeitems {
     grid-template-columns: auto auto;
+    justify-content: space-around;
+    gap: 0;
   }
 }
