@@ -21,6 +21,8 @@ import { getsingleproduct } from '@/api/products/productapi';
 import { delproduct } from '@/api/products/productapi';
 import { updateproduct } from '@/api/products/productapi';
 import {CartDrawer} from '../../helpers/CartDrawer'
+import ArrowForward from '@mui/icons-material/ArrowForwardIosTwoTone';
+import ArrowBack from '@mui/icons-material/ArrowBackIosNewTwoTone';
 interface Dimension{
     width:number,
     height:number,
@@ -87,6 +89,8 @@ export default function Productdetails(){
     const [brand1,setBrand1]=useState(brand);
     const [weight1,setWeight1]=useState(weight);
     const [minorder1,setMinOrder1]=useState(minorder);
+    const [index,setIndex]=useState(0);
+    const reviews=data?.reviews || [];
     const addtask=()=>{
         dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
         setOpenCart(true);
@@ -140,6 +144,13 @@ export default function Productdetails(){
             alert(err);
         }
     }
+   const next = () => {
+        setIndex((prev)=>(prev+1)%reviews.length);
+    };  
+
+    const prev = () => {
+        setIndex((prev)=>(prev-1+reviews.length)%reviews.length);
+    };
     useEffect(()=>{
          if (!id) return;  
         fetchdata();
@@ -181,19 +192,24 @@ export default function Productdetails(){
                 
             </div>
             <p className={style.destxt}>Reviews:</p>
-                <div className={style.body2}>
-                        {
-                            data?.reviews?.map((review)=> 
-                            <div className={style.rate} key={review.reviewerEmail+review.comment}>
-                                <p className={style.txttitle}>Rating : {review.rating}</p>
-                                <p>Comment : {review.comment}</p>
-                                <p>Date : {review.date}</p>
-                                <p>ReviewerName : {review.reviewerName}</p>
-                                <p>ReviewerMail : {review.reviewerEmail}</p>
+                {reviews.length > 0 ? 
+                    (
+                        <div className={style.body2}>
+                            <button onClick={prev} className={style.btn}><ArrowBack/></button>
+                            <div className={style.rate}>
+                                <p className={style.txttitle}>
+                                    Rating : {reviews[index]?.rating}
+                                </p>
+                                <p>Comment : {reviews[index]?.comment}</p>
+                                <p>Date : {reviews[index]?.date}</p>
+                                <p>ReviewerName : {reviews[index]?.reviewerName}</p>
+                                <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
                             </div>
-                            )
-                        }
-                </div>
+                            <button onClick={next} className={style.btn}><ArrowForward/></button>
+                        </div>
+                    ) : 
+                    (<p>No reviews available</p>)
+                }
 
             <div className={style.btns}>
                 <Button variant="contained"  className='deletebtn' onClick={delprod}

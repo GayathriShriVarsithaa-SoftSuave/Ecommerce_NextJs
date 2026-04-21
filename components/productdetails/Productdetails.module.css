@@ -42,7 +42,6 @@
     flex-direction: row;
     justify-content: space-around;
     margin-top: 30px;
-    gap: 20px;
 }
 .destxt{
     font-size: 18px;
@@ -93,6 +92,9 @@
     padding-right: 18px;
     padding-bottom: 20px;
 }
+.btn:hover{
+    cursor: pointer;
+}
 @media screen and (max-width:800px){
     .prodbody{
         flex-direction: column;
@@ -109,8 +111,8 @@
 }
 
 @media screen and (max-width:993px){
-    .body2{
+    /* .body2{
         flex-direction: column;
         gap: 30px;
-    }
+    } */
 }

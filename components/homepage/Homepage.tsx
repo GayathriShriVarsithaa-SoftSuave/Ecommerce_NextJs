@@ -137,7 +137,7 @@ export default function Homepage(){
     container.addEventListener("scroll", handleScroll);
     }, []);
    
-
+    
     return(<div className={style.tot}>
         <div className={style.homehead}>
             <div className={style.headerprod}>
