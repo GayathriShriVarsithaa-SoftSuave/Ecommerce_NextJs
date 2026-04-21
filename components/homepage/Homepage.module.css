@@ -1,3 +1,9 @@
+.tot{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
 .homehead{
     position:sticky;
     top:0;
@@ -45,18 +51,20 @@
     grid-template-columns: auto auto auto auto;
     gap:30px;
     width: 100%;
-    padding-bottom: 60px;
-    overflow:auto
+    overflow-y: auto;
+    height: 83%;
 }
 .buttonsform{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 18px;
 }
 @media screen and (max-width: 850px) {
   .homeitems {
     grid-template-columns: auto auto;
     justify-content: space-around;
     gap: 0;
+    height: 83%;
   }
 }

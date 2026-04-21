@@ -10,19 +10,16 @@ import {DialogContent} from '@mui/material';
 import {DialogContentText} from '@mui/material';
 import {DialogTitle} from '@mui/material';
 import {TablePagination} from '@mui/material';
-import Textarea from '@mui/joy/Textarea';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import { Button, Drawer, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Thumbnail from '../thumbnail/Thumbnail';
-import {RootState} from '../../redux/store'
-import { useSelector } from 'react-redux';
-import Item from '../item/Item'
 import { generateId } from '@/helpers/generateId';
 import { getproducts } from '@/api/products/productapi';
 import { searchproducts } from '@/api/products/productapi';
 import { addproduct } from '@/api/products/productapi';
+import { CartDrawer } from '@/helpers/CartDrawer';
 type Product={
     id:string,
     title:string,
@@ -43,7 +40,6 @@ export default function Homepage(){
     const [brand,setBrand]=useState("");
     const [stock,setStock]=useState(0);
     const [searchtext,setSearchText]=useState("");
-    const { cartitems } = useSelector((state: RootState) => state.cartitem);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -73,10 +69,6 @@ export default function Homepage(){
         else{
             try{
                 const res=await searchproducts(searchtxt)
-                if(!res.ok){
-                    alert("Something went wrong!");
-                    return;
-                }
                 const data= await res.json();
                 const localprod=Object.keys(localStorage).map((keys)=>{
                 const pro = localStorage.getItem(keys);
@@ -100,10 +92,6 @@ export default function Homepage(){
         }
         try{
             const res=await addproduct(title,category,des,price,rating,img,brand,stock);
-            if(!res.ok){
-                alert("something went wrong!!");
-                return;
-            }
             const data=await res.json();
             localStorage.setItem(generateId(),JSON.stringify(data));
             await fetchdata();
@@ -117,10 +105,6 @@ export default function Homepage(){
     const fetchdata=async()=>{
         try{
             const res = await getproducts();
-            if (!res.ok) {
-                alert("something went wrong!");
-                return;
-            }
             const data = await res.json();
                 const localdata=Object.keys(localStorage).map((keys)=>{
                     return JSON.parse((localStorage.getItem(keys)) || '{}')
@@ -133,7 +117,7 @@ export default function Homepage(){
         }
     }
     useEffect(()=>{
-        fetchdata()
+        fetchdata() 
     },[]);
     const scrollRef = useRef<HTMLDivElement>(null);
     const lastScrollY = useRef(0);
@@ -154,7 +138,7 @@ export default function Homepage(){
     }, []);
    
 
-    return(<div ref={scrollRef} className="flex-1 overflow-y-auto h-screen">
+    return(<div className={style.tot}>
         <div className={style.homehead}>
             <div className={style.headerprod}>
                 <Button className={style.addbtn} onClick={()=>setOpenForm(true)}
@@ -208,8 +192,8 @@ export default function Homepage(){
         </div>
 
        
-        
-            <div className={style.homeitems} >
+    
+            <div className={style.homeitems} ref={scrollRef}>
                 {
                     data.length!==0?
                         (data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item)=>
@@ -219,8 +203,29 @@ export default function Homepage(){
                         (<p style={{textAlign:'center', fontSize:'20px'}}>No Products Found</p>)
                 }
             </div>
+         <TablePagination component="div"
+                sx={{
+                    width:'100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    bottom:'0',
+                    backgroundColor:'whitesmoke',
+                    position:'fixed'
+                    
+                }}
+                count={data.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />  
         
-        <Dialog open={openform} onClose={()=>setOpenForm(false)} >
+        <Dialog open={openform} onClose={()=>setOpenForm(false)} sx={{
+            '& .MuiDialog-paper': {
+            width: '600px',  
+            maxWidth: '90%'  
+            }
+        }} >
             <DialogTitle>Add a Product</DialogTitle>
             <IconButton onClick={()=>setOpenForm(false)} sx={{
                 position:"absolute",
@@ -232,14 +237,13 @@ export default function Homepage(){
             <DialogContentText sx={{textIndent:25}}>Enter details for the product to add</DialogContentText>
             <DialogContent>
                 <form onSubmit={(e)=>{e.preventDefault(),additem()}} id='addform'>
-                    <TextField placeholder='Enter title of the product' label='Title' required type='text'margin='dense' sx={{width:"400px"}} onChange={(e)=>{setTitle(e.target.value)}}/><br />
-                    <TextField placeholder='Enter category of the product' label='Category' required type='text' margin='dense' sx={{width:"400px"}} onChange={(e)=>{setCategory(e.target.value)}}/><br />
-                    <TextField placeholder='Enter price of the product' label='Price' required type='number' margin='dense' sx={{width:"400px"}}onChange={(e)=>{setPrice(Number(e.target.value))}}/><br />
-                    <p>Description</p>
-                    <Textarea placeholder='Enter description of the product'sx={{width:"400px"}} maxRows={5} required onChange={(e)=>{setDes(e.target.value)}}/><br />
-                    <TextField placeholder='Enter product stock' label='Stock' type='number' required sx={{width:"400px"}} onChange={(e)=>setStock(Number(e.target.value))} /><br />
-                    <TextField placeholder='Enter brand of the product' label='Brand' type='text' required margin='dense' sx={{width:"400px"}} onChange={(e)=>setBrand(e.target.value)}/><br />
-                    <TextField placeholder='Enter product image URL' label='Image URL' required type='url' margin='dense' sx={{width:"400px"}} onChange={(e)=>setImg(e.target.value)}/>
+                    <TextField placeholder='Enter title of the product' label='Title' required type='text'margin='dense' sx={{width:"100%"}} onChange={(e)=>{setTitle(e.target.value)}}/><br />
+                    <TextField placeholder='Enter category of the product' label='Category' required type='text' margin='dense' sx={{width:"100%"}} onChange={(e)=>{setCategory(e.target.value)}}/><br />
+                    <TextField placeholder='Enter price of the product' label='Price' required type='number' margin='dense' sx={{width:"100%"}}onChange={(e)=>{setPrice(Number(e.target.value))}}/><br />
+                    <TextField placeholder='Enter description of the product' label='Description' margin='dense' multiline rows={5} required sx={{width:"100%"}} onChange={(e)=>{setDes(e.target.value)}}/><br />
+                    <TextField placeholder='Enter product stock' label='Stock' type='number' margin='dense' required sx={{width:"100%"}} onChange={(e)=>setStock(Number(e.target.value))} /><br />
+                    <TextField placeholder='Enter brand of the product' label='Brand' type='text' required margin='dense' sx={{width:"100%"}} onChange={(e)=>setBrand(e.target.value)}/><br />
+                    <TextField placeholder='Enter product image URL' label='Image URL' required type='url' margin='dense' sx={{width:"100%"}} onChange={(e)=>setImg(e.target.value)}/><br />
                     <p>Rating for the product:</p>
                     <RadioGroup orientation='horizontal' sx={{gap:2}} onChange={(e)=>{setRating(Number(e.target.value))}}>
                             <Radio value="1" label='1'  variant='outlined' />
@@ -261,40 +265,8 @@ export default function Homepage(){
 
         </Dialog>
 
-
         <Drawer anchor="right" open={opendia} onClose={()=>setOpenDia(false)}  >
-                <div style={{ width: '300px', padding: '20px' }}>
-                            <h2>Cart</h2>
-                            {
-                                Object.keys(cartitems).length===0?<p>No items in Cart</p>:
-                                Object.keys(cartitems).map((key)=>(
-                                    <div>
-                                        <Item title={cartitems[key].title} price={cartitems[key].price} img={cartitems[key].img} id={key}/>
-                                    </div>
-                                ))
-                                
-                            }
-                            {
-                        Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
-                        }
-                    </div>
-
-            </Drawer>
-       
-            <TablePagination component="div"
-                sx={{
-                    width:'100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    position:'fixed',
-                    bottom:'0',
-                    backgroundColor:'whitesmoke'
-                }}
-                count={data.length}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />  
+                <CartDrawer />
+        </Drawer>
     </div>);
 }

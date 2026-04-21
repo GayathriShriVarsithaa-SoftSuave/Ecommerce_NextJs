@@ -12,16 +12,15 @@ import {DialogActions} from '@mui/material';
 import {DialogContent} from '@mui/material';
 import {DialogContentText} from '@mui/material';
 import {DialogTitle} from '@mui/material';
-import Textarea from '@mui/joy/Textarea';
 import Link from 'next/link';
 import { addcartItem } from '@/redux/features/cartSlice';
 import { Drawer } from '@mui/joy';
 import type { RootState } from '../../redux/store';
-import Item from '../item/Item'
 import { useParams } from 'next/navigation';
 import { getsingleproduct } from '@/api/products/productapi';
 import { delproduct } from '@/api/products/productapi';
 import { updateproduct } from '@/api/products/productapi';
+import {CartDrawer} from '../../helpers/CartDrawer'
 interface Dimension{
     width:number,
     height:number,
@@ -79,8 +78,6 @@ export default function Productdetails(){
     const router=useRouter();
     const dispatch=useDispatch();
     const [opencart,setOpenCart]=useState(false);
-    const { cartitems } = useSelector((state: RootState) => state.cartitem);
-
     const [title1,setTitle1]=useState(title);
     const [des1,setDes1]=useState(des);
     const [rating1,setRating1]=useState(rating);
@@ -97,10 +94,6 @@ export default function Productdetails(){
     const updateitem=async()=>{
         try{
             const res=await updateproduct(id || "",title1,category1,price1,actualprice1,rating1,des1,brand1,weight1,minorder1);
-            if(!res.ok){
-                alert("Something went wrong!");
-                return;
-            }
             setTitle(title1);
             setDes(des1);
             setCategory(category1);
@@ -120,10 +113,6 @@ export default function Productdetails(){
     const delprod=async()=>{
         try{
             const res=await delproduct(id || "");
-            if(!res.ok){
-                alert("something went wrong!");
-                return;
-            }
             alert("Product Deleted!");
             router.push("/");
         }
@@ -135,10 +124,6 @@ export default function Productdetails(){
     const fetchdata=async()=>{
         try{
             const res=await getsingleproduct(id || "");
-            if(!res.ok){
-                alert("something went wrong!");
-                return;
-            }
             const data=await res.json();
             setData(data);
             setTitle(data.title);
@@ -199,7 +184,7 @@ export default function Productdetails(){
                 <div className={style.body2}>
                         {
                             data?.reviews?.map((review)=> 
-                            <div className={style.rate} key={review.reviewerEmail}>
+                            <div className={style.rate} key={review.reviewerEmail+review.comment}>
                                 <p className={style.txttitle}>Rating : {review.rating}</p>
                                 <p>Comment : {review.comment}</p>
                                 <p>Date : {review.date}</p>
@@ -208,8 +193,6 @@ export default function Productdetails(){
                             </div>
                             )
                         }
-                        
-                    
                 </div>
 
             <div className={style.btns}>
@@ -221,7 +204,12 @@ export default function Productdetails(){
                 }}>Update</Button>
             </div>
 
-            <Dialog open={diaopen} onClose={()=>setDiaOpen(false)}>
+            <Dialog open={diaopen} onClose={()=>setDiaOpen(false)} sx={{
+                '& .MuiDialog-paper': {
+                width: '600px',   
+                maxWidth: '90%'  
+                }
+            }}>
                 <DialogTitle>Edit Product Details</DialogTitle>
                 <IconButton onClick={()=>setDiaOpen(false)} sx={{
                     position:"absolute",
@@ -235,7 +223,6 @@ export default function Productdetails(){
                     <form onSubmit={(e)=>{e.preventDefault(),updateitem()}} id='editform'>
                         <TextField 
                             sx={{ width: '100%' }}
-                        variant="standard"
                         value={title1}
                         required
                         label='Title'
@@ -246,14 +233,12 @@ export default function Productdetails(){
                             sx={{ width: '100%' }}
                             margin="dense"
                             required
-                         variant="standard"
                         value={category1}
                         label='Category'
                         onChange={(e)=>setCategory1(e.target.value)}/><br />
                         <TextField 
                             sx={{ width: '100%' }}
                             margin="dense"
-                        variant="standard"
                         required
                         value={price1}
                         label='Price'
@@ -262,23 +247,23 @@ export default function Productdetails(){
                         sx={{width:'100%'}}
                         margin="dense"
                         required
-                        variant="standard"
                         value={actualprice1}
                         label='Actual Price'
                         onChange={(e)=>setActualPrice1(Number(e.target.value))}
                         />
-                        <p>Description</p>
-                        <Textarea 
-                        value={des1}maxRows={5}
-                        onChange={(e)=>setDes1(e.target.value)}
-                        sx={{width:'100%'}}
+                        <TextField 
+                        value={des1}
+                        rows={4}
+                        multiline
                         required
-                        />
+                        margin='dense'
+                        label='Description'
+                        onChange={(e)=>setDes1(e.target.value)}
+                        sx={{width:"100%"}}/>
                         <TextField
                         sx={{width:'100%'}}
                         required
                         margin="dense"
-                        variant="standard"
                         value={rating1}
                         label='Rating'
                         type='Number'
@@ -287,7 +272,6 @@ export default function Productdetails(){
                         <TextField
                         sx={{width:'100%'}}
                         margin="dense"
-                        variant="standard"
                         required
                         value={brand1}
                         label="Brand"
@@ -297,7 +281,6 @@ export default function Productdetails(){
                         sx={{width:'100%'}}
                         margin="dense"
                         required
-                        variant="standard"
                         value={weight1}
                         label="Weight"
                         type='Number'
@@ -308,7 +291,6 @@ export default function Productdetails(){
                         margin="dense"
                         value={minorder1}
                         label="Minimum Order"
-                        variant="standard"
                         type='Number'
                         required
                         onChange={(e)=>setMinOrder1(Number(e.target.value))}
@@ -325,26 +307,9 @@ export default function Productdetails(){
                 </div>
             </Dialog>
 
-
-
             <Drawer anchor="right" open={opencart} onClose={()=>setOpenCart(false)} >
-                <div style={{ width: '300px', padding: '20px' }}>
-                            <h2>Cart</h2>
-                            {
-                                Object.keys(cartitems).length===0?<p>No items in Cart</p>:
-                                Object.keys(cartitems).map((key)=>(
-                                    <div>
-                                        <Item title={cartitems[key].title} price={cartitems[key].price} img={cartitems[key].img} id={key}/>
-                                    </div>
-                                ))
-                            }
-                            {
-                        Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
-                        }
-                    </div>
-
-            </Drawer>
-            
+                <CartDrawer />
+            </Drawer> 
     </div>);
 }
 
