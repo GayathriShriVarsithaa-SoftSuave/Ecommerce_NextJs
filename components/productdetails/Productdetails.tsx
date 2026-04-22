@@ -15,7 +15,6 @@ import {DialogTitle} from '@mui/material';
 import Link from 'next/link';
 import { addcartItem } from '@/redux/features/cartSlice';
 import { Drawer } from '@mui/joy';
-import type { RootState } from '../../redux/store';
 import { useParams } from 'next/navigation';
 import { getsingleproduct } from '@/api/products/productapi';
 import { delproduct } from '@/api/products/productapi';
@@ -23,6 +22,7 @@ import { updateproduct } from '@/api/products/productapi';
 import {CartDrawer} from '../../helpers/CartDrawer'
 import ArrowForward from '@mui/icons-material/ArrowForwardIosTwoTone';
 import ArrowBack from '@mui/icons-material/ArrowBackIosNewTwoTone';
+import DataForm,{FormData} from '@/helpers/DataForm';
 interface Dimension{
     width:number,
     height:number,
