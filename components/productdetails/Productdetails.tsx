@@ -3,15 +3,9 @@ import style from './Productdetails.module.css'
 import { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useRouter} from 'next/navigation'
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { Button, TextField } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button} from '@mui/material';
+import { useDispatch} from 'react-redux';
 import {Dialog} from '@mui/material';
-import {DialogActions} from '@mui/material';
-import {DialogContent} from '@mui/material';
-import {DialogContentText} from '@mui/material';
-import {DialogTitle} from '@mui/material';
 import Link from 'next/link';
 import { addcartItem } from '@/redux/features/cartSlice';
 import { Drawer } from '@mui/joy';
@@ -80,22 +74,13 @@ export default function Productdetails(){
     const router=useRouter();
     const dispatch=useDispatch();
     const [opencart,setOpenCart]=useState(false);
-    const [title1,setTitle1]=useState(title);
-    const [des1,setDes1]=useState(des);
-    const [rating1,setRating1]=useState(rating);
-    const [category1,setCategory1]=useState(category);
-    const [price1,setPrice1]=useState(price);
-    const [actualprice1,setActualPrice1]=useState(actualprice);
-    const [brand1,setBrand1]=useState(brand);
-    const [weight1,setWeight1]=useState(weight);
-    const [minorder1,setMinOrder1]=useState(minorder);
     const [index,setIndex]=useState(0);
     const reviews=data?.reviews || [];
     const addtask=()=>{
         dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
         setOpenCart(true);
     }
-    const updateitem=async()=>{
+    const updateitem=async(id:string,title1:string,category1:string,price1:number,actualprice1:number,rating1:number,des1:string,brand1:string,weight1:number,minorder1:number)=>{
         try{
             const res=await updateproduct(id || "",title1,category1,price1,actualprice1,rating1,des1,brand1,weight1,minorder1);
             setTitle(title1);
@@ -108,7 +93,6 @@ export default function Productdetails(){
             setPrice(price1);
             setRating(rating1);
             setDiaOpen(false); 
-            alert("Updated");
         }
         catch(err){
             alert(err);
@@ -215,112 +199,18 @@ export default function Productdetails(){
                 <Button variant="contained"  className='deletebtn' onClick={delprod}
                 sx={{backgroundColor:'red', '&:hover':{backgroundColor:'#ff5252',}, '&:active':{backgroundColor:'#ff1744'} }}>Delete</Button>
                 <Button variant="contained"
-                sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}} className='updatebtn' onClick={()=>{setDiaOpen(true);setTitle1(title);setPrice1(price);setCategory1(category);setDes1(des);
-                    setActualPrice1(actualprice);setBrand1(brand);setRating1(rating);setWeight1(weight);setMinOrder1(minorder);
+                sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}} className='updatebtn' onClick={()=>{setDiaOpen(true)
                 }}>Update</Button>
             </div>
 
-            <Dialog open={diaopen} onClose={()=>setDiaOpen(false)} sx={{
-                '& .MuiDialog-paper': {
-                width: '600px',   
-                maxWidth: '90%'  
-                }
-            }}>
-                <DialogTitle>Edit Product Details</DialogTitle>
-                <IconButton onClick={()=>setDiaOpen(false)} sx={{
-                    position:"absolute",
-                    top:"8px",
-                    right:"8px"
-                }}>
-                    <CloseIcon />
-                </IconButton>
-                <DialogContentText sx={{textIndent:25}}>Edit the product details below</DialogContentText>
-                <DialogContent>
-                    <form onSubmit={(e)=>{e.preventDefault(),updateitem()}} id='editform'>
-                        <TextField 
-                            sx={{ width: '100%' }}
-                        value={title1}
-                        required
-                        label='Title'
-                        margin="dense"
-                        onChange={(e)=>setTitle1(e.target.value)}
-                        /><br></br>
-                        <TextField 
-                            sx={{ width: '100%' }}
-                            margin="dense"
-                            required
-                        value={category1}
-                        label='Category'
-                        onChange={(e)=>setCategory1(e.target.value)}/><br />
-                        <TextField 
-                            sx={{ width: '100%' }}
-                            margin="dense"
-                        required
-                        value={price1}
-                        label='Price'
-                        onChange={(e)=>setPrice1(Number(e.target.value))}/><br/>
-                        <TextField
-                        sx={{width:'100%'}}
-                        margin="dense"
-                        required
-                        value={actualprice1}
-                        label='Actual Price'
-                        onChange={(e)=>setActualPrice1(Number(e.target.value))}
-                        />
-                        <TextField 
-                        value={des1}
-                        rows={4}
-                        multiline
-                        required
-                        margin='dense'
-                        label='Description'
-                        onChange={(e)=>setDes1(e.target.value)}
-                        sx={{width:"100%"}}/>
-                        <TextField
-                        sx={{width:'100%'}}
-                        required
-                        margin="dense"
-                        value={rating1}
-                        label='Rating'
-                        type='Number'
-                        onChange={(e)=>setRating1(Number(e.target.value))}
-                        />
-                        <TextField
-                        sx={{width:'100%'}}
-                        margin="dense"
-                        required
-                        value={brand1}
-                        label="Brand"
-                        onChange={(e)=>setBrand1(e.target.value)}
-                        />
-                        <TextField
-                        sx={{width:'100%'}}
-                        margin="dense"
-                        required
-                        value={weight1}
-                        label="Weight"
-                        type='Number'
-                        onChange={(e)=>setWeight1(Number(e.target.value))}
-                        />
-                         <TextField
-                        sx={{width:'100%'}}
-                        margin="dense"
-                        value={minorder1}
-                        label="Minimum Order"
-                        type='Number'
-                        required
-                        onChange={(e)=>setMinOrder1(Number(e.target.value))}
-                        />
-                    </form>
-                </DialogContent>
-                <div className={style.buttonsform}>
-                    <DialogActions>
-                        <Button variant="contained" onClick={()=>setDiaOpen(false)} sx={{backgroundColor:'red', '&:hover':{backgroundColor:'#ff5252',}, '&:active':{backgroundColor:'#ff1744'} }}>Close</Button>
-                    </DialogActions>
-                    <DialogActions>
-                        <Button variant="contained" form='editform' type='submit' sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}}>Edit</Button>
-                    </DialogActions>
-                </div>
+            <Dialog open={diaopen} onClose={()=>setDiaOpen(false)} sx={{'& .MuiDialog-paper': { width: '600px', maxWidth: '90%'}}}>
+                <DataForm isedit={true} onClose={() => setDiaOpen(false)} defaultValues={{ title, category, price, des, brand, rating, actualprice, weight, minorder }}
+                    onSubmit={(formData) => {
+                        updateitem(id || "",formData.title,formData.category,formData.price,formData.actualprice || 0,formData.rating,formData.des,formData.brand,formData.weight || 0,formData.minorder || 0);
+                        setDiaOpen(false);
+                        alert("Updated");
+                    }}
+                />
             </Dialog>
 
             <Drawer anchor="right" open={opencart} onClose={()=>setOpenCart(false)} >
@@ -328,4 +218,3 @@ export default function Productdetails(){
             </Drawer> 
     </div>);
 }
-

@@ -27,7 +27,9 @@ export default function Homepage(){
     const [searchtext,setSearchText]=useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const lastScrollY = useRef(0);
+    const [showsearch, setShowsearch] = useState(true);
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
@@ -77,7 +79,7 @@ export default function Homepage(){
             return;
         }
         try{
-            const res=await addproduct(title,category,des,price,rating,img,brand,stock);
+            const res=await addproduct(title,category,des,price,rating,img || "",brand,stock || 0);
             const data=await res.json();
             localStorage.setItem(generateId(),JSON.stringify(data));
             await fetchdata();
@@ -105,9 +107,6 @@ export default function Homepage(){
     useEffect(()=>{
         fetchdata() 
     },[]);
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const lastScrollY = useRef(0);
-    const [showsearch, setShowsearch] = useState(true);
     useEffect(() => {
         const container = scrollRef.current;
         if (!container) return;
@@ -180,8 +179,6 @@ export default function Homepage(){
             <SearchIcon />
         </div>
 
-       
-    
             <div className={style.homeitems} ref={scrollRef}>
                 {
                     data.length!==0?
