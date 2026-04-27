@@ -1,5 +1,6 @@
 "use client"
 import style from './Productdetails.module.css'
+import {motion,AnimatePresence} from 'framer-motion'
 import { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useRouter} from 'next/navigation'
@@ -75,6 +76,7 @@ export default function Productdetails(){
     const dispatch=useDispatch();
     const [opencart,setOpenCart]=useState(false);
     const [index,setIndex]=useState(0);
+    const [direction,setDirection]=useState(1);
     const reviews=data?.reviews || [];
     const addtask=()=>{
         dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
@@ -129,10 +131,12 @@ export default function Productdetails(){
         }
     }
    const next = () => {
+        setDirection(1);
         setIndex((prev)=>(prev+1)%reviews.length);
     };  
 
     const prev = () => {
+        setDirection(-1);
         setIndex((prev)=>(prev-1+reviews.length)%reviews.length);
     };
     useEffect(()=>{
@@ -180,7 +184,8 @@ export default function Productdetails(){
                     (
                         <div className={style.body2}>
                             <button onClick={prev} className={style.btn}><ArrowBack/></button>
-                            <div className={style.rate}>
+                            <AnimatePresence mode="wait">
+                            <motion.div className={style.rate} key={index} initial={{opacity:0,x: direction===1? 300 : -300 }} animate={{opacity:1,x:0}} exit={{opacity:0,x:direction===1?-300:300}} transition={{duration:0.5}} >
                                 <p className={style.txttitle}>
                                     Rating : {reviews[index]?.rating}
                                 </p>
@@ -188,7 +193,7 @@ export default function Productdetails(){
                                 <p>Date : {reviews[index]?.date}</p>
                                 <p>ReviewerName : {reviews[index]?.reviewerName}</p>
                                 <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
-                            </div>
+                            </motion.div></AnimatePresence>
                             <button onClick={next} className={style.btn}><ArrowForward/></button>
                         </div>
                     ) : 
