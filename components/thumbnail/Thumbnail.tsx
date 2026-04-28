@@ -37,8 +37,8 @@ export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
             sx={
                 {
                     borderRadius: "30px",
-                    backgroundColor: "#02e7d0",
-                    color: "black",
+                    backgroundColor: "#138A8A ",
+                    color: "white",
                     padding: "10px",
                     fontSize: "medium",
                     fontWeight: 500,
@@ -46,11 +46,11 @@ export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
                     display:"block",
                     margin:"10px auto",
                     '&:hover': {
-                    backgroundColor: "#26a69a",
+                    backgroundColor: "#19A3A3",
                     cursor:"pointer"
                     },
                     '&:active': {
-                    backgroundColor: "#0ef0da",
+                    backgroundColor: "#0F6F6F",
                     }
                 }
             }>Add to cart</Button>

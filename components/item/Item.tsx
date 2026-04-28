@@ -21,7 +21,7 @@ export default function Item({id,img,price,title}:ItemProps){
         <Button onClick={()=>delitem()}
         sx={{
             borderRadius: "30px",
-            backgroundColor: "#ff1744",
+            backgroundColor: "#da5050",
             color: "white",
             padding: "10px",
             fontSize: "medium",
@@ -29,11 +29,11 @@ export default function Item({id,img,price,title}:ItemProps){
             border:"0px",
             margin:"10px auto",
             '&:hover': {
-            backgroundColor: "#ff5252",
+            backgroundColor: "#c74444",
             cursor:"pointer"
             },
             '&:active': {
-            backgroundColor: "#ff1744",
+            backgroundColor: "#a83636",
             }
         }}>Delete</Button>
     </div>);

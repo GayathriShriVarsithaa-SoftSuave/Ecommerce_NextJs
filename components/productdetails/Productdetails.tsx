@@ -132,23 +132,24 @@ export default function Productdetails(){
     }
    const next = () => {
         setDirection(1);
-        setIndex((prev)=>(prev+1)%reviews.length);
+        setIndex((prev)=>(prev+2)%reviews.length);
     };  
 
     const prev = () => {
         setDirection(-1);
-        setIndex((prev)=>(prev-1+reviews.length)%reviews.length);
+        setIndex((prev)=>(prev-2+reviews.length)%reviews.length);
     };
     useEffect(()=>{
          if (!id) return;  
         fetchdata();
     },[id])
+    const index1=(index+1)%reviews.length;
     return(
         <div className={style.prod}>
             <div className={style.prodhead}>
-                <Link href={"/"}> <ArrowBackIcon className={style.backicon}/></Link>
+                <Link href={"/"}> <ArrowBackIcon/></Link>
                 
-                <Button onClick={()=>addtask()} className={style.addcart} sx={{backgroundColor:'#02e7d0',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}}>Add to Cart</Button>
+                <Button onClick={()=>addtask()} className={style.addcart} sx={{backgroundColor:'#138A8A ',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>Add to Cart</Button>
             </div>
             <p className={style.heading}>{title}</p>
             <p className={style.destxt}>Description:</p>
@@ -179,32 +180,57 @@ export default function Productdetails(){
                 </div>
                 
             </div>
-            <p className={style.destxt}>Reviews:</p>
-                {reviews.length > 0 ? 
+                {reviews.length > 1 ? 
                     (
                         <div className={style.body2}>
                             <button onClick={prev} className={style.btn}><ArrowBack/></button>
-                            <AnimatePresence mode="wait">
-                            <motion.div className={style.rate} key={index} initial={{opacity:0,x: direction===1? 300 : -300 }} animate={{opacity:1,x:0}} exit={{opacity:0,x:direction===1?-300:300}} transition={{duration:0.5}} >
-                                <p className={style.txttitle}>
-                                    Rating : {reviews[index]?.rating}
-                                </p>
-                                <p>Comment : {reviews[index]?.comment}</p>
-                                <p>Date : {reviews[index]?.date}</p>
-                                <p>ReviewerName : {reviews[index]?.reviewerName}</p>
-                                <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
+                            <AnimatePresence initial={false} mode="wait">
+                            <motion.div className={style.ratediv} key={index+index1} initial={{opacity:0,x: direction===1? 300 : -300 }} animate={{opacity:1,x:0}} exit={{opacity:0,x:direction===1?-300:300}} transition={{duration:0.3}} > 
+                                <div className={style.ratediv}>
+                                     <div className={style.rate} key={index}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index]?.comment}</p>
+                                        <p>Date : {reviews[index]?.date}</p>
+                                        <p>ReviewerName : {reviews[index]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
+                                    </div>
+                                    <div className={style.rate} key={index1}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index1]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index1]?.comment}</p>
+                                        <p>Date : {reviews[index1]?.date}</p>
+                                        <p>ReviewerName : {reviews[index1]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index1]?.reviewerEmail}</p>
+                                    </div>
+                                </div>
+                               
                             </motion.div></AnimatePresence>
                             <button onClick={next} className={style.btn}><ArrowForward/></button>
                         </div>
                     ) : 
-                    (<p>No reviews available</p>)
-                }
+                    ( reviews.length>0 ? (
+                                <div className={style.ratediv}>
+                                     <div className={style.rate} key={index}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index]?.comment}</p>
+                                        <p>Date : {reviews[index]?.date}</p>
+                                        <p>ReviewerName : {reviews[index]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
+                                    </div>
+                                </div>
+                    ): (<p>No reviews available</p>)
+                    )}
 
             <div className={style.btns}>
                 <Button variant="contained"  className='deletebtn' onClick={delprod}
-                sx={{backgroundColor:'red', '&:hover':{backgroundColor:'#ff5252',}, '&:active':{backgroundColor:'#ff1744'} }}>Delete</Button>
+                sx={{backgroundColor:'#da5050',color:'white' ,'&:hover':{backgroundColor:'#c74444',}, '&:active':{backgroundColor:'#a83636'} }}>Delete</Button>
                 <Button variant="contained"
-                sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}} className='updatebtn' onClick={()=>{setDiaOpen(true)
+                sx={{backgroundColor:'#138A8A ',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}} className='updatebtn' onClick={()=>{setDiaOpen(true)
                 }}>Update</Button>
             </div>
 

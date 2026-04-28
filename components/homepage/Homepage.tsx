@@ -132,18 +132,18 @@ export default function Homepage(){
                 <Button className={style.addbtn} onClick={()=>setOpenForm(true)}
                 sx={{
                     borderRadius: "30px",
-                    backgroundColor: "#02e7d0",
-                    color: "black",
+                    backgroundColor: "#138A8A ",
+                    color: "white",
                     padding: "10px",
                     fontSize: "medium",
                     fontWeight: 500,
                     width: "100px",
                     height: "50px",
                     '&:hover': {
-                    backgroundColor: "#26a69a",
+                    backgroundColor: "#19A3A3",
                     },
                     '&:active': {
-                    backgroundColor: "#0ef0da",
+                    backgroundColor: "#0F6F6F",
                     }
                 }}
                 >Add</Button>

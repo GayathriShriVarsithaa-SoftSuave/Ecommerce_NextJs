@@ -58,10 +58,10 @@ export default function DataForm({ onSubmit,onClose,defaultValues,isedit }: Prop
         <TextField label="URL" placeholder="Enter product Image URL" fullWidth margin="dense" required type="url" {...register("img")}/><br />
         <TextField label="Stock" type="number" placeholder="Enter product Stock" fullWidth margin="dense" required {...register("stock", { valueAsNumber: true, min:1})}/><br /></div>
       )}
-      <TextField label="Rating" placeholder="Give rating for the product" type="number" fullWidth margin="dense" required helperText={errors.rating?.message}{...register("rating",{valueAsNumber:true,min:{value:1,message:"Minimum value should be 1"},max:{value:5,message:"Maximum value should be 5"}})}/><br />
+      <TextField label="Rating" placeholder="Give rating for the product" type="number" fullWidth margin="dense" required helperText={errors.rating?.message}{...register("rating",{valueAsNumber:true,min:{value:1,message:"Minimum value should be 1"},max:{value:5,message:"Maximum value should be 5"}})}/><br /><br/>
         <div style={{display:"flex", flexDirection:"row",justifyContent:"space-between"}}>
-            <Button onClick={onClose} variant="contained" sx={{backgroundColor:'red', '&:hover':{backgroundColor:'#ff5252',}, '&:active':{backgroundColor:'#ff1744'} }}>Close</Button>
-            <Button variant="contained" type='submit' sx={{backgroundColor:'#02e7d0', '&:hover':{backgroundColor:'#26a69a',}, '&:active':{backgroundColor:'#0ef0da'}}}>{isedit?"Edit":"Add Product"}</Button>
+            <Button onClick={onClose} variant="contained" sx={{backgroundColor:'#da5050', '&:hover':{backgroundColor:'#c74444',}, '&:active':{backgroundColor:'#a83636'} }}>Close</Button>
+            <Button variant="contained" type='submit' sx={{backgroundColor:'#138A8A ', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>{isedit?"Edit":"Add Product"}</Button>
        </div>
     </form>
   );

@@ -6,7 +6,7 @@ import { Button} from '@mui/material';
 export const CartDrawer=()=>{
     const { cartitems } = useSelector((state: RootState) => state.cartitem);
     return(
-        <div style={{ width: '300px', padding: '20px' }}>
+        <div style={{ width: 'auto', padding: '10px' }}>
             <h2>Cart</h2>
             {
                 Object.keys(cartitems).length===0?<p>No items in Cart</p>:
@@ -17,7 +17,7 @@ export const CartDrawer=()=>{
                 ))
             }
             {
-            Object.keys(cartitems).length!=0 && (<Button variant="contained" color="secondary" sx={{ml:'10px'}}>Proceed to Buy</Button>)
+            Object.keys(cartitems).length!=0 && (<Button variant="contained" sx={{ml:'10px',backgroundColor:'#138A8A ', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>Proceed to Buy</Button>)
             }
          </div>
     );
