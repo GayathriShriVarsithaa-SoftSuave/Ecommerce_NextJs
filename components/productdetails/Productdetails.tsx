@@ -148,37 +148,50 @@ export default function Productdetails(){
         <div className={style.prod}>
             <div className={style.prodhead}>
                 <Link href={"/"}> <ArrowBackIcon/></Link>
-                
-                <Button onClick={()=>addtask()} className={style.addcart} sx={{backgroundColor:'#138A8A ',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>Add to Cart</Button>
             </div>
-            <p className={style.heading}>{title}</p>
-            <p className={style.destxt}>Description:</p>
-            <p className={style.prodes}>{des}</p>
-
-            
-            <div className={style.prodbody}>
-                <div className={style.prodimage}>
-                    <img src={data?.images?.[0]} alt='prod img' className={style.prodimages}/>
-                    <div className={style.pricebody}>
-                        <h3>Price: ${price}</h3>
-                        <p>Actual Price: <span style={{textDecoration:"line-through"}}>${actualprice}</span></p>
+            <div className={style.prod1}>
+            <div className={style.products}>
+                <div className={style.prodbody}>
+                    <div className={style.prodimage}>
+                        <img src={data?.images?.[0]} alt='prod img' className={style.prodimages}/>
+                        <div className={style.pricebody}>
+                            <p style={{fontWeight:"600", fontSize:"22px"}}>Price: ${price}</p>
+                            <p style={{fontSize:"18px"}}>Actual Price: <span style={{textDecoration:"line-through"}}>${actualprice}</span></p>
+                        </div>
                     </div>
                 </div>
-
-                <div className={style.proddetails}>
-                    <p><span className={style.txttitle}>Category : </span>{category}</p>
-                    <p><span className={style.txttitle}>Rating : </span>{rating}</p>
-                    <p><span className={style.txttitle}>Stock : </span>{data?.stock}</p>
-                    <p><span className={style.txttitle}>Brand : </span>{brand}</p>
-                    <p><span className={style.txttitle}>Weight : </span>{weight} g</p>
-                    <p><span className={style.txttitle}>Waranty :</span> {data?.warrantyInformation}</p>
-                    <p><span className={style.txttitle}>Shipping :</span> {data?.shippingInformation}</p>
-                    <p><span className={style.txttitle}>Availability :</span> {data?.availabilityStatus}</p>
-                    <p><span className={style.txttitle}>Return Policy :</span> {data?.returnPolicy}</p>
-                    <p><span className={style.txttitle}>Minimum Order Quantity :</span> {data?.minimumOrderQuantity}</p>
-                    
+                <div>
+                    <p className={style.heading}>{title}</p>
+                    <p className={style.destxt}>Description:</p>
+                    <p className={style.prodes}>{des}</p>
+                    <Button onClick={()=>addtask()} className={style.addcart} sx={{marginTop:'20px',height:'8%',width:'{sm:40% md:20%}',backgroundColor:'#138A8A ',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>Add to Cart</Button>
+                    <div className={style.maincard}>
+                        <div className={style.card1}>
+                            <p className={style.card}><span className={style.txttitle}>Category <br/> </span>{category}</p>
+                            <p className={style.card}><span className={style.txttitle}>Brand <br/> </span>{brand}</p>
+                        </div>
+                        <div className={style.card1}>
+                            <p className={style.card}><span className={style.txttitle}>Rating <br/> </span>{rating}</p>
+                            <p className={style.card}><span className={style.txttitle}>Availability <br/></span> {data?.availabilityStatus}</p>
+                        </div>
+                    </div>
                 </div>
-                
+            </div>
+            <div className={style.specfiydiv}>
+                <p className={style.specify}>Specifications</p>
+                <hr className={style.horizontal}/>
+                <div className={style.productdetailsmain}>
+                    <div className={style.productdetails}>
+                        <p className={style.card}><span className={style.txttitle}>Stock <br/> </span>{data?.stock}</p>
+                        <p className={style.card}><span className={style.txttitle}>Weight <br/> </span>{weight} g</p>
+                        <p className={style.card}><span className={style.txttitle}>Waranty <br/></span> {data?.warrantyInformation}</p>
+                    </div>
+                    <div className={style.productdetails}>
+                        <p className={style.card}><span className={style.txttitle}>Shipping <br/></span> {data?.shippingInformation}</p>
+                        <p className={style.card}><span className={style.txttitle}>Return Policy <br/></span> {data?.returnPolicy}</p>
+                        <p className={style.card}><span className={style.txttitle}>Minimum Order Quantity <br/></span> {data?.minimumOrderQuantity}</p>
+                    </div>
+                </div>
             </div>
                 {reviews.length > 1 ? 
                     (
@@ -247,5 +260,5 @@ export default function Productdetails(){
             <Drawer anchor="right" open={opencart} onClose={()=>setOpenCart(false)} >
                 <CartDrawer />
             </Drawer> 
-    </div>);
+    </div></div>);
 }
