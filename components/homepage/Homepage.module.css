@@ -1,9 +1,18 @@
+.tot{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
 .homehead{
     position:sticky;
     top:0;
     z-index: 1;
-    background-color: whitesmoke;
-    padding-bottom: 10px;
+    background-color: #d8d5d3;
+    padding-bottom: 45px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .headerprod{
     display: flex;
@@ -12,7 +21,6 @@
     justify-content: space-between;
     font-size: 30px;
     font-weight: 600;
-    margin:10px;
 }
 .headprodp{
     font-size: 30px;
@@ -36,17 +44,28 @@
     width: 80%;
     padding: 10px;
     height: 50px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 .homeitems{
     display: grid;
+    background-color: #d8d5d3;
     grid-template-columns: auto auto auto auto;
     gap:30px;
-    width: 95%;
-
+    width: 100%;
+    overflow-y: auto;
+    height: 83%;
 }
-@media screen and (max-width: 800px) {
+.buttonsform{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 18px;
+}
+@media screen and (max-width: 850px) {
   .homeitems {
     grid-template-columns: auto auto;
+    justify-content: space-around;
+    gap: 0;
+    height: 83%;
   }
 }

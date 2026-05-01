@@ -1,0 +1,264 @@
+"use client"
+import style from './Productdetails.module.css'
+import {motion,AnimatePresence} from 'framer-motion'
+import { useEffect, useState } from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {useRouter} from 'next/navigation'
+import { Button} from '@mui/material';
+import { useDispatch} from 'react-redux';
+import {Dialog} from '@mui/material';
+import Link from 'next/link';
+import { addcartItem } from '@/redux/features/cartSlice';
+import { Drawer } from '@mui/joy';
+import { useParams } from 'next/navigation';
+import { getsingleproduct } from '@/api/products/productapi';
+import { delproduct } from '@/api/products/productapi';
+import { updateproduct } from '@/api/products/productapi';
+import {CartDrawer} from '../../helpers/CartDrawer'
+import ArrowForward from '@mui/icons-material/ArrowForwardIosTwoTone';
+import ArrowBack from '@mui/icons-material/ArrowBackIosNewTwoTone';
+import DataForm,{FormData} from '@/helpers/DataForm';
+interface Dimension{
+    width:number,
+    height:number,
+    depth:number
+}
+interface Review{
+    rating:number,
+    comment:string,
+    date:string,
+    reviewerName:string,
+    reviewerEmail:string
+}
+interface Meta{
+    createdAt:string,
+    updatedAt:string,
+    barcode:string,
+    qrCode:string
+}
+interface ProductData{
+    title:string,
+    price:number,
+    discountPercentage:number,
+    rating:number,
+    stock:number,
+    tags:string[],
+    brand:string,
+    weight:number,
+    dimensions:Dimension,
+    warrantyInformation:string,
+    shippingInformation:string,
+    availabilityStatus:string,
+    reviews:Review[],
+    returnPolicy:string,
+    minimumOrderQuantity:number,
+    meta:Meta,
+    description:string,
+    category:string,
+    images:string[]
+}
+
+export default function Productdetails(){
+    const params = useParams();
+    const id = Array.isArray(params.id) ? params.id[0] : params.id;
+    const [diaopen,setDiaOpen]=useState(false);
+    const [data,setData]=useState<ProductData>();
+    const [title,setTitle]=useState("");
+    const [category,setCategory]=useState("");
+    const [price,setPrice]=useState(0);
+    const [actualprice,setActualPrice]=useState(0);
+    const [rating,setRating]=useState(0);
+    const [des,setDes]=useState("");
+    const [brand,setBrand]=useState("");
+    const [weight,setWeight]=useState(0);
+    const [minorder,setMinOrder]=useState(0);
+    const router=useRouter();
+    const dispatch=useDispatch();
+    const [opencart,setOpenCart]=useState(false);
+    const [index,setIndex]=useState(0);
+    const [direction,setDirection]=useState(1);
+    const reviews=data?.reviews || [];
+    const addtask=()=>{
+        dispatch(addcartItem({id:id || "",item:{title,price,img:data?.images[0] || ''}}))
+        setOpenCart(true);
+    }
+    const updateitem=async(id:string,title1:string,category1:string,price1:number,actualprice1:number,rating1:number,des1:string,brand1:string,weight1:number,minorder1:number)=>{
+        try{
+            const res=await updateproduct(id || "",title1,category1,price1,actualprice1,rating1,des1,brand1,weight1,minorder1);
+            setTitle(title1);
+            setDes(des1);
+            setCategory(category1);
+            setBrand(brand1);
+            setWeight(weight1);
+            setMinOrder(minorder1);
+            setActualPrice(actualprice1);
+            setPrice(price1);
+            setRating(rating1);
+            setDiaOpen(false); 
+        }
+        catch(err){
+            alert(err);
+        }
+    }
+    const delprod=async()=>{
+        try{
+            const res=await delproduct(id || "");
+            alert("Product Deleted!");
+            router.push("/");
+        }
+        catch(err){      
+            alert(err);
+        }
+    }
+    
+    const fetchdata=async()=>{
+        try{
+            const res=await getsingleproduct(id || "");
+            const data=await res.json();
+            setData(data);
+            setTitle(data.title);
+            setCategory(data.category);
+            setPrice(data.price);
+            setActualPrice(data.discountPercentage);
+            setDes(data.description);
+            setRating(data.rating);
+            setBrand(data.brand);
+            setWeight(data.weight);
+            setMinOrder(data.minimumOrderQuantity)
+        }
+        catch(err){
+            alert(err);
+        }
+    }
+   const next = () => {
+        setDirection(1);
+        setIndex((prev)=>(prev+2)%reviews.length);
+    };  
+
+    const prev = () => {
+        setDirection(-1);
+        setIndex((prev)=>(prev-2+reviews.length)%reviews.length);
+    };
+    useEffect(()=>{
+         if (!id) return;  
+        fetchdata();
+    },[id])
+    const index1=(index+1)%reviews.length;
+    return(
+        <div className={style.prod}>
+            <div className={style.prodhead}>
+                <Link href={"/"}> <ArrowBackIcon/></Link>
+            </div>
+            <div className={style.prod1}>
+            <div className={style.products}>
+                <div className={style.prodbody}>
+                    <div className={style.prodimage}>
+                        <img src={data?.images?.[0]} alt='prod img' className={style.prodimages}/>
+                        <div className={style.pricebody}>
+                            <p style={{fontWeight:"600", fontSize:"22px"}}>Price: ${price}</p>
+                            <p style={{fontSize:"18px"}}>Actual Price: <span style={{textDecoration:"line-through"}}>${actualprice}</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p className={style.heading}>{title}</p>
+                    <p className={style.destxt}>Description:</p>
+                    <p className={style.prodes}>{des}</p>
+                    <Button onClick={()=>addtask()} className={style.addcart} sx={{marginTop:'20px',height:'8%',width:'{sm:40% md:20%}',backgroundColor:'#138A8A ',borderradius:'30px',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}}>Add to Cart</Button>
+                    <div className={style.maincard}>
+                        <div className={style.card1}>
+                            <p className={style.card}><span className={style.txttitle}>Category <br/> </span>{category}</p>
+                            <p className={style.card}><span className={style.txttitle}>Brand <br/> </span>{brand}</p>
+                        </div>
+                        <div className={style.card1}>
+                            <p className={style.card}><span className={style.txttitle}>Rating <br/> </span>{rating}</p>
+                            <p className={style.card}><span className={style.txttitle}>Availability <br/></span> {data?.availabilityStatus}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={style.specfiydiv}>
+                <p className={style.specify}>Specifications</p>
+                <hr className={style.horizontal}/>
+                <div className={style.productdetailsmain}>
+                    <div className={style.productdetails}>
+                        <p className={style.card}><span className={style.txttitle}>Stock <br/> </span>{data?.stock}</p>
+                        <p className={style.card}><span className={style.txttitle}>Weight <br/> </span>{weight} g</p>
+                        <p className={style.card}><span className={style.txttitle}>Waranty <br/></span> {data?.warrantyInformation}</p>
+                    </div>
+                    <div className={style.productdetails}>
+                        <p className={style.card}><span className={style.txttitle}>Shipping <br/></span> {data?.shippingInformation}</p>
+                        <p className={style.card}><span className={style.txttitle}>Return Policy <br/></span> {data?.returnPolicy}</p>
+                        <p className={style.card}><span className={style.txttitle}>Minimum Order Quantity <br/></span> {data?.minimumOrderQuantity}</p>
+                    </div>
+                </div>
+            </div>
+                {reviews.length > 1 ? 
+                    (
+                        <div className={style.body2}>
+                            <button onClick={prev} className={style.btn}><ArrowBack/></button>
+                            <AnimatePresence initial={false} mode="wait">
+                            <motion.div className={style.ratediv} key={index+index1} initial={{opacity:0,x: direction===1? 300 : -300 }} animate={{opacity:1,x:0}} exit={{opacity:0,x:direction===1?-300:300}} transition={{duration:0.3}} > 
+                                <div className={style.ratediv}>
+                                     <div className={style.rate} key={index}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index]?.comment}</p>
+                                        <p>Date : {reviews[index]?.date}</p>
+                                        <p>ReviewerName : {reviews[index]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
+                                    </div>
+                                    <div className={style.rate} key={index1}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index1]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index1]?.comment}</p>
+                                        <p>Date : {reviews[index1]?.date}</p>
+                                        <p>ReviewerName : {reviews[index1]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index1]?.reviewerEmail}</p>
+                                    </div>
+                                </div>
+                               
+                            </motion.div></AnimatePresence>
+                            <button onClick={next} className={style.btn}><ArrowForward/></button>
+                        </div>
+                    ) : 
+                    ( reviews.length>0 ? (
+                                <div className={style.ratediv}>
+                                     <div className={style.rate} key={index}>
+                                        <p className={style.txttitle}>
+                                            Rating : {reviews[index]?.rating}
+                                        </p>
+                                        <p>Comment : {reviews[index]?.comment}</p>
+                                        <p>Date : {reviews[index]?.date}</p>
+                                        <p>ReviewerName : {reviews[index]?.reviewerName}</p>
+                                        <p>ReviewerMail : {reviews[index]?.reviewerEmail}</p>
+                                    </div>
+                                </div>
+                    ): (<p>No reviews available</p>)
+                    )}
+
+            <div className={style.btns}>
+                <Button variant="contained"  className='deletebtn' onClick={delprod}
+                sx={{backgroundColor:'#da5050',color:'white' ,'&:hover':{backgroundColor:'#c74444',}, '&:active':{backgroundColor:'#a83636'} }}>Delete</Button>
+                <Button variant="contained"
+                sx={{backgroundColor:'#138A8A ',color:'white', '&:hover':{backgroundColor:'#19A3A3',}, '&:active':{backgroundColor:'#0F6F6F'}}} className='updatebtn' onClick={()=>{setDiaOpen(true)
+                }}>Update</Button>
+            </div>
+
+            <Dialog open={diaopen} onClose={()=>setDiaOpen(false)} sx={{'& .MuiDialog-paper': { width: '600px', maxWidth: '90%'}}}>
+                <DataForm isedit={true} onClose={() => setDiaOpen(false)} defaultValues={{ title, category, price, des, brand, rating, actualprice, weight, minorder }}
+                    onSubmit={(formData) => {
+                        updateitem(id || "",formData.title,formData.category,formData.price,formData.actualprice || 0,formData.rating,formData.des,formData.brand,formData.weight || 0,formData.minorder || 0);
+                        setDiaOpen(false);
+                        alert("Updated");
+                    }}
+                />
+            </Dialog>
+
+            <Drawer anchor="right" open={opencart} onClose={()=>setOpenCart(false)} >
+                <CartDrawer />
+            </Drawer> 
+    </div></div>);
+}

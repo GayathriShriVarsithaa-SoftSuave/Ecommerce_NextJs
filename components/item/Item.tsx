@@ -1,6 +1,8 @@
 "use client"
 import { Button } from '@mui/material';
 import style from './Item.module.css'
+import { useDispatch } from 'react-redux';
+import { deleteCartItem } from '@/redux/features/cartSlice';
 interface ItemProps{
     title:string,
     price:number,
@@ -8,13 +10,18 @@ interface ItemProps{
     id:string
 }
 export default function Item({id,img,price,title}:ItemProps){
+    const dispatch=useDispatch();
+    const delitem=()=>{
+        dispatch(deleteCartItem(id))
+    }
     return(<div className={style.itembody}>
         <p>{title}</p>
         <p>{price}</p>
         <img src={img} alt="Item image" className={style.itemimage} />
-        <Button sx={{
+        <Button onClick={()=>delitem()}
+        sx={{
             borderRadius: "30px",
-            backgroundColor: "#ff1744",
+            backgroundColor: "#da5050",
             color: "white",
             padding: "10px",
             fontSize: "medium",
@@ -22,11 +29,11 @@ export default function Item({id,img,price,title}:ItemProps){
             border:"0px",
             margin:"10px auto",
             '&:hover': {
-            backgroundColor: "#ff5252",
+            backgroundColor: "#c74444",
             cursor:"pointer"
             },
             '&:active': {
-            backgroundColor: "#ff1744",
+            backgroundColor: "#a83636",
             }
         }}>Delete</Button>
     </div>);

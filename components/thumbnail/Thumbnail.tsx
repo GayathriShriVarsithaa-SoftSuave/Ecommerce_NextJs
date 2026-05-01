@@ -1,6 +1,10 @@
 "use client"
 import style from './Thumbnail.module.css'
-import { Button, Drawer, TextField} from '@mui/material';
+import Link from 'next/link';
+import { Button} from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { addcartItem } from '@/redux/features/cartSlice';
+import {generateDes} from '@/helpers/generateDes'
 interface ThumbnailProps{
     id:string;
     img:string;
@@ -9,21 +13,32 @@ interface ThumbnailProps{
     price:number
 };
 export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
-    return(<div className={style.thumbbody}>
-        <div className={style.thumbnailbody}>
-            <img src={img} alt="Thumbnail" className={style.thumbimg}/>
-            <div className={style.titleprice}>
-                <p className={style.thumbtitle}>{title}</p>
-                <p className={style.thumbprice}>{price}</p>
+    const dispatch=useDispatch();
+    const addtask=()=>{
+        dispatch(addcartItem({id,item:{title,price,img}}))
+        alert("Product added!!")
+    }
+    const description=generateDes(des);
+    return(
+       
+    <div className={style.thumbbody}>
+        <Link href={`/product/${id}`}>
+            <div className={style.thumbnailbody}>
+                <img src={img} alt="Thumbnail" className={style.thumbimg}/>
+                <div className={style.titleprice}>
+                    <p className={style.thumbtitle}>{title}</p>
+                    <p className={style.thumbprice}>{price}</p>
+                </div>
+                <p className={style.des}>{description}</p>
             </div>
-            <p className={style.des}>{des}</p>
-        </div>
+        </Link>
         <div>
-            <Button sx={
+            <Button onClick={()=>addtask()}
+            sx={
                 {
                     borderRadius: "30px",
-                    backgroundColor: "#02e7d0",
-                    color: "black",
+                    backgroundColor: "#138A8A ",
+                    color: "white",
                     padding: "10px",
                     fontSize: "medium",
                     fontWeight: 500,
@@ -31,11 +46,11 @@ export default function Thumbnail({id,img,title,des,price}:ThumbnailProps){
                     display:"block",
                     margin:"10px auto",
                     '&:hover': {
-                    backgroundColor: "#26a69a",
+                    backgroundColor: "#19A3A3",
                     cursor:"pointer"
                     },
                     '&:active': {
-                    backgroundColor: "#0ef0da",
+                    backgroundColor: "#0F6F6F",
                     }
                 }
             }>Add to cart</Button>
