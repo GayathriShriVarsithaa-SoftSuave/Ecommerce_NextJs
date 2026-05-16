@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
 }
+
+
 .homehead{
     position:sticky;
     top:0;
